@@ -8,13 +8,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Mobile menu functionality
 function initializeMobileMenu() {
-    const menuBtn = document.querySelector('.menu-btn');
+    const menuBtn = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
 
-    menuBtn.addEventListener('click', () => {
-        navLinks.classList.toggle('active');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-    });
+    if (menuBtn && navLinks) {
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        });
+    }
 }
 
 // Header scroll behavior

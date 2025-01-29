@@ -198,6 +198,9 @@ nav {
     position: relative;
     margin: 2rem auto;
     animation: float 6s ease-in-out infinite;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .computer-monitor {
@@ -212,6 +215,7 @@ nav {
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
+    margin-bottom: 0;
 }
 
 .monitor-screen {
@@ -262,20 +266,23 @@ nav {
 /* Monitor Stand */
 .monitor-stand {
     width: 20%;
-    height: 15%;
+    height: 60px;
     background: #2a2a2a;
-    margin: 0 auto;
+    margin: -2px auto 0;
     border-radius: 0 0 10px 10px;
     position: relative;
+    z-index: 1;
 }
 
 .monitor-base {
     width: 40%;
     height: 20px;
     background: #2a2a2a;
-    margin: 0 auto;
+    margin: -2px auto 0;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
 }
 
 /* Keyboard */
@@ -287,6 +294,7 @@ nav {
     border-radius: 5px;
     position: relative;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    z-index: 3;
 }
 
 .keyboard::before {
@@ -325,21 +333,24 @@ nav {
     .hero-image {
         max-width: 100%;
         height: auto;
+        margin: 1rem auto;
     }
 
     .computer-monitor {
         min-height: 250px;
-        margin-bottom: 20px;
+        margin-bottom: 0;
     }
 
     .monitor-stand {
         width: 25%;
-        height: 30px;
+        height: 40px;
+        margin-top: -2px;
     }
 
     .monitor-base {
         width: 50%;
         height: 15px;
+        margin-top: -2px;
     }
 
     .keyboard {
@@ -356,7 +367,11 @@ nav {
     }
 
     .computer-monitor {
-        padding-bottom: 80%;
+        min-height: 200px;
+    }
+
+    .monitor-stand {
+        height: 30px;
     }
 
     .qweek-logo {
@@ -370,7 +385,7 @@ nav {
 
 /* Hero Section */
 .hero {
-    padding: 6rem 2rem;
+    padding: 3rem 2rem 6rem;
     min-height: 100vh;
     display: flex;
     align-items: center;
@@ -446,6 +461,7 @@ nav {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    text-decoration: none !important;
 }
 
 .hero .cta-button::after {
@@ -671,12 +687,13 @@ html {
     }
 
     .hero {
-        padding: 4rem 1rem;
+        padding: 2rem 1rem 4rem;
     }
 
     .hero-content {
         flex-direction: column;
         text-align: center;
+        gap: 2rem;
     }
 }
 
