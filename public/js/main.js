@@ -1,3 +1,77 @@
+// Wait for DOM to be fully loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMobileMenu();
+    initializeHeaderScroll();
+    initializeSmoothScroll();
+    initializeSkillBars();
+});
+
+// Mobile menu functionality
+function initializeMobileMenu() {
+    const menuBtn = document.querySelector('.menu-btn');
+    const navLinks = document.querySelector('.nav-links');
+
+    menuBtn.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+    });
+}
+
+// Header scroll behavior
+function initializeHeaderScroll() {
+    const header = document.querySelector('header');
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+        const currentScrollY = window.scrollY;
+        
+        if (currentScrollY > lastScrollY) {
+            // Scrolling down
+            header.classList.add('header-hidden');
+            header.classList.remove('header-visible');
+        } else {
+            // Scrolling up
+            header.classList.remove('header-hidden');
+            header.classList.add('header-visible');
+        }
+        
+        lastScrollY = currentScrollY;
+    });
+}
+
+// Smooth scroll for anchor links
+function initializeSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+}
+
+// Initialize skill bars animation
+function initializeSkillBars() {
+    const skillBars = document.querySelectorAll('.skill-bar');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, {
+        threshold: 0.5
+    });
+
+    skillBars.forEach(bar => observer.observe(bar));
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     // Create smooth scroll indicator
     const smoothScroll = document.createElement('div');
@@ -50,98 +124,6 @@ document.addEventListener('DOMContentLoaded', () => {
         lastScrollTop = scrollTop;
     });
 
-    // Header scroll behavior
-    const header = document.querySelector('header');
-    let lastScrollY = window.scrollY;
-    let isScrollingDown = false;
-    let scrollDelta = 5; // Minimum scroll difference to trigger header movement
-
-    function onScroll() {
-        if (frameId) {
-            return;
-        }
-
-        frameId = requestAnimationFrame(() => {
-            const currentScrollY = window.scrollY;
-            const difference = Math.abs(currentScrollY - lastScrollY);
-            
-            // Only trigger header movement if scroll difference is significant
-            if (difference > scrollDelta) {
-                if (currentScrollY > lastScrollY && currentScrollY > 70) {
-                    // Scrolling down
-                    if (!isScrollingDown) {
-                        header.classList.add('header-hidden');
-                        header.classList.remove('header-visible');
-                        isScrollingDown = true;
-                    }
-                } else if (currentScrollY < lastScrollY || currentScrollY <= 70) {
-                    // Scrolling up or at top
-                    if (isScrollingDown) {
-                        header.classList.remove('header-hidden');
-                        header.classList.add('header-visible');
-                        isScrollingDown = false;
-                    }
-                }
-            }
-
-            lastScrollY = currentScrollY;
-            frameId = null;
-        });
-    }
-
-    // Debounced scroll event with higher delay for smoother transitions
-    window.addEventListener('scroll', () => {
-        if (!scrollTimeout) {
-            scrollTimeout = setTimeout(() => {
-                onScroll();
-                scrollTimeout = null;
-            }, 16); // Approximately 60fps
-        }
-    }, { passive: true });
-
-    // Mobile menu functionality
-    const menuToggle = document.querySelector('.menu-toggle');
-    const navLinks = document.querySelector('.nav-links');
-    
-    if (menuToggle) {
-        menuToggle.addEventListener('click', () => {
-            navLinks.classList.toggle('active');
-            document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
-        });
-
-        // Close menu when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!menuToggle.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains('active')) {
-                navLinks.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
-    }
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const headerOffset = 80;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-
-                // Close mobile menu if open
-                if (navLinks.classList.contains('active')) {
-                    navLinks.classList.remove('active');
-                    document.body.style.overflow = '';
-                }
-            }
-        });
-    });
-
     // Intersection Observer for fade-in animations
     const observerOptions = {
         threshold: 0.15,
@@ -185,21 +167,5 @@ document.addEventListener('DOMContentLoaded', () => {
         
         document.querySelector('.hero::before').style.transform = 
             `translate(${moveX}px, ${moveY}px)`;
-    });
-
-    // Animate skill bars on scroll
-    const skillCards = document.querySelectorAll('.skill-card');
-    const skillObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const skillLevel = entry.target.querySelector('.skill-level');
-                skillLevel.style.width = skillLevel.getAttribute('data-width') || skillLevel.style.width;
-                skillObserver.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    skillCards.forEach(card => {
-        skillObserver.observe(card);
     });
 }); 
